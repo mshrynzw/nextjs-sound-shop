@@ -28,9 +28,10 @@ const Item = () => {
           <FontAwesomeIcon icon={faCirclePlay}/>
         </div>
         <div className="font-bold text-white flex flex-wrap justify-center gap-2">
-          <div className="rounded-lg px-4 py-2 bg-black bg-opacity-50 ">Uplifting Trance</div>
-          <div className="rounded-lg px-4 py-2 bg-black bg-opacity-50 ">Sylenth 1</div>
-          <div className="rounded-lg px-4 py-2 bg-black bg-opacity-50 ">Bass</div>
+          <button className="animate-bounce bg-blue-500 hover:bg-blue-700 py-2 px-4 rounded shadow-2xl">$ 1</button>
+          <div className="rounded-lg px-4 py-2 bg-black bg-opacity-50">Uplifting Trance</div>
+          <div className="rounded-lg px-4 py-2 bg-black bg-opacity-50">Sylenth 1</div>
+          <div className="rounded-lg px-4 py-2 bg-black bg-opacity-50">Bass</div>
         </div>
       </div>
     </div>
