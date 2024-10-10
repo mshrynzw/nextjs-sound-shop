@@ -26,7 +26,7 @@ const Search = () => {
         </div>
       </div>
       <div className="max-w-[40ch] sm:max-w-[32ch]">
-        <input type="text" className="w-full" id="keyword" name="keyword"/>
+        <input type="text" className="w-full px-2 rounded" id="keyword" name="keyword" placeholder="Search..."/>
       </div>
     </div>
   )

@@ -39,3 +39,6 @@ next-env.d.ts
 .idea/nextjs-soundpresets-frontend.iml
 .idea/vcs.xml
 .idea/inspectionProfiles/Project_Default.xml
+
+# env
+.env
