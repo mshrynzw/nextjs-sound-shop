@@ -1,7 +1,13 @@
-export default function Home() {
+import Main from "@/components/home/Main";
+// import Footer from "@/components/home/Footer";
+
+const Home = () => {
   return (
     <>
-      <div>test</div>
+      <Main/>
+      {/* <Footer/> */}
     </>
   );
 }
+
+export default Home;
