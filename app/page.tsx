@@ -1,22 +1,39 @@
-import { supabase } from "@/lib/supabaseClient";
+import {supabase} from "@/lib/supabaseClient"
 import Button from "@/components/home/Button"
 import Search from "@/components/home/Search"
 import Items from "@/components/home/Items"
+import {SearchProvider} from "@/context/SearchContext"
 
 const getItems = async () => {
-  const { data, error } = await supabase.from("items").select("*")
-  if (error) throw error
-  return data
+  try {
+    const {data: items, error: itemsError} = await supabase
+      .from("items")
+      .select("*")
+
+    if (itemsError) throw itemsError
+
+    const {data: tags, error: tagsError} = await supabase
+      .from("tags")
+      .select("*")
+
+    if (tagsError) throw tagsError
+
+    return items.map(item => ({
+      ...item,
+      tags: item.tag_ids.map((tagId: number) => tags.find(tag => tag.id === tagId)).filter(Boolean)
+    }))
+  } catch (error) {
+    console.error("Error fetching items and tags:", error)
+  }
 }
 
 export const revalidate = 3600
 
 const Home = async () => {
   const items = await getItems()
-  console.log(items)
 
   return (
-    <>
+    <SearchProvider>
       <main className="mx-auto p-4 max-w-[1960px]">
         {/* {photoId && (
           <Modal
@@ -41,7 +58,7 @@ const Home = async () => {
             </div>
           </div>
 
-          <Items items={items} />
+          <Items items={items || []}/>
 
           {/* {images.map(({ id, public_id, format, blurDataUrl }) => (
             <Link
@@ -70,7 +87,7 @@ const Home = async () => {
           ))} */}
         </div>
       </main>
-    </>
+    </SearchProvider>
   )
 }
 

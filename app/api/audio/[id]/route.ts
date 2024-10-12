@@ -7,7 +7,7 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   const { id } = params;
-  const audioPath = path.resolve(`./public/audio/preset/${id}.mp3`);
+  const audioPath = path.resolve(`./public/audio/${id}.mp3`);
 
   const stat = fs.statSync(audioPath);
   const fileSize = stat.size;
