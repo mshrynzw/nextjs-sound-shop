@@ -19,7 +19,7 @@ const Search = () => {
 
       <Tags/>
 
-      <div className="max-w-[40ch] sm:max-w-[32ch]">
+      <div className="max-w-[40ch] sm:max-w-[32ch] py-2">
         <input
           type="text"
           id="keyword"

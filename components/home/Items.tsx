@@ -8,6 +8,7 @@ import AudioStreamer from "@/components/audio/AudioStreamer"
 import {useSearch} from "@/context/SearchContext"
 import {Tag} from "@/types/tag"
 import {AudioProvider} from "@/context/AudioContext"
+import {useCart} from "@/context/CartContext"
 
 interface ItemsProps {
   items: Item[];
@@ -15,18 +16,12 @@ interface ItemsProps {
 
 const Items: React.FC<ItemsProps> = ({items}) => {
   const {keyword, selectTags} = useSearch()
-  const [cart, setCart] = useState<Item[]>(() => {
-    const savedCart = Cookies.get("cart")
-    return savedCart ? JSON.parse(savedCart) : []
-  })
+  const {cart, addToCart, removeFromCart, clearCart, isItemInCart} = useCart()
+
   const [isClient, setIsClient] = useState(false)
 
   useEffect(() => {
     setIsClient(true)
-    const savedCart = Cookies.get("cart")
-    if (savedCart) {
-      setCart(JSON.parse(savedCart))
-    }
   }, [])
 
   const filteredItems = items.filter(item =>
@@ -34,24 +29,13 @@ const Items: React.FC<ItemsProps> = ({items}) => {
     (selectTags.length === 0 || selectTags.every(tag => item.tags?.some(itemTag => itemTag.id === tag.id)))
   )
 
-  const isItemInCart = (item: Item) => {
-    return cart.some(cartItem => cartItem.id === item.id)
-  }
-
   const handleAddClick = (item: Item) => {
-    const updatedCart = [...cart.filter((i: Item) => i.id !== item.id), item]
-    setCart(updatedCart)
-    Cookies.set("cart", JSON.stringify(updatedCart), {expires: 7})
+    addToCart(item)
   }
 
   const handleRemoveClick = (item: Item) => {
-    const updatedCart = cart.filter((i: Item) => i.id !== item.id)
-    setCart(updatedCart)
-    if (updatedCart.length > 0) {
-      Cookies.set("cart", JSON.stringify(updatedCart), {expires: 7})
-    } else {
-      Cookies.remove("cart")
-    }
+    removeFromCart(item)
+    if (cart.length === 0) clearCart()
   }
 
   return (
@@ -83,7 +67,7 @@ const Items: React.FC<ItemsProps> = ({items}) => {
               <AudioStreamer id={item.id.toString()}/>
 
               <div className="font-bold text-white flex flex-wrap justify-center gap-2">
-                {isClient ? (
+                {isClient && (
                   isItemInCart(item) ? (
                     <button
                       className="animate-bounce bg-red-500 hover:bg-red-700 py-2 px-4 rounded shadow-2xl"
@@ -99,21 +83,14 @@ const Items: React.FC<ItemsProps> = ({items}) => {
                       Add $ {item.price.toString()}
                     </button>
                   )
-                ) : (
-                  <button
-                    className="animate-bounce bg-blue-500 hover:bg-blue-700 py-2 px-4 rounded shadow-2xl"
-                    onClick={() => handleAddClick(item)}
-                  >
-                    Add $ {item.price.toString()}
-                  </button>
                 )}
-                {item.tags?.map((tag: Tag, i: number) => (
+                {item.tags?.map((tag: Tag) => (
                   tag.alias ? (
-                    <div key={i} className="rounded-lg px-4 py-2 bg-black bg-opacity-50">
+                    <div key={tag.id} className="rounded-lg px-4 py-2 bg-black bg-opacity-50">
                       {tag.alias}
                     </div>
                   ) : (
-                    <div key={i} className="rounded-lg px-4 py-2 bg-black bg-opacity-50">
+                    <div key={tag.id} className="rounded-lg px-4 py-2 bg-black bg-opacity-50">
                       {tag.name}
                     </div>
                   )

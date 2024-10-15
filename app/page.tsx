@@ -3,6 +3,7 @@ import Button from "@/components/home/Button"
 import Search from "@/components/home/Search"
 import Items from "@/components/home/Items"
 import {SearchProvider} from "@/context/SearchContext"
+import {CartProvider} from "@/context/CartContext"
 
 const getItems = async () => {
   try {
@@ -34,8 +35,9 @@ const Home = async () => {
 
   return (
     <SearchProvider>
-      <main className="mx-auto p-4 max-w-[1960px]">
-        {/* {photoId && (
+      <CartProvider>
+        <main className="mx-auto p-4 max-w-[1960px]">
+          {/* {photoId && (
           <Modal
             images={images}
             onClose={() => {
@@ -43,24 +45,24 @@ const Home = async () => {
             }}
           />
         )} */}
-        <div className="columns-1 gap-4 sm:columns-2 xl:columns-3 2xl:columns-4">
-          <div
-            className="after:pointer-events-none after:absolute relative after:inset-0 flex flex-col items-center gap-4 overflow-hidden rounded-lg after:rounded-lg bg-white/10 px-6 py-8 text-center text-white after:content h-[629px] shadow-highlight after:shadow-highlight lg:py-0 mb-4">
-            <div className="flex flex-col items-center justify-between h-full w-full">
-              <div className="flex flex-col items-center gap-4 w-full divide-y space-y-4">
-                <Button/>
-                <Search/>
-              </div>
-              <div className="my-8 text-white/50">
-                <div>kaoruyukisound.com</div>
-                <div>Copyright © {new Date().getFullYear()} Kaoru Yuki</div>
+          <div className="columns-1 gap-4 sm:columns-2 xl:columns-3 2xl:columns-4">
+            <div
+              className="after:pointer-events-none after:absolute relative after:inset-0 flex flex-col items-center gap-4 overflow-hidden rounded-lg after:rounded-lg bg-white/10 px-6 py-8 text-center text-white after:content h-[629px] shadow-highlight after:shadow-highlight lg:py-0 mb-4">
+              <div className="flex flex-col items-center justify-between h-full w-full">
+                <div className="flex flex-col items-center gap-4 w-full divide-y space-y-4">
+                  <Button/>
+                  <Search/>
+                </div>
+                <div className="my-8 text-white/50">
+                  <div>kaoruyukisound.com</div>
+                  <div>Copyright © {new Date().getFullYear()} Kaoru Yuki</div>
+                </div>
               </div>
             </div>
-          </div>
 
-          <Items items={items || []}/>
+            <Items items={items || []}/>
 
-          {/* {images.map(({ id, public_id, format, blurDataUrl }) => (
+            {/* {images.map(({ id, public_id, format, blurDataUrl }) => (
             <Link
               key={id}
               href={`/?photoId=${id}`}
@@ -85,8 +87,9 @@ const Home = async () => {
               />
             </Link>
           ))} */}
-        </div>
-      </main>
+          </div>
+        </main>
+      </CartProvider>
     </SearchProvider>
   )
 }
