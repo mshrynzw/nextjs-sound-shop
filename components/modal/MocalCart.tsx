@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, {useEffect, useState} from "react"
 import {useCart} from "@/context/CartContext"
 import {useModal} from "@/context/ModalContext"
 import {Item} from "@/types/item"
@@ -8,6 +8,12 @@ import {Item} from "@/types/item"
 const ModalCart = () => {
   const {cart, removeFromCart, clearCart} = useCart()
   const {closeModal} = useModal()
+
+  const [isClient, setIsClient] = useState(false)
+
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
 
   const handleRemoveClick = (item: Item) => {
     removeFromCart(item)
@@ -47,6 +53,9 @@ const ModalCart = () => {
             className="rounded-lg bg-blue-500 px-3 py-2 text-sm font-semibold uppercase text-white shadow-2xl transition pointer hover:bg-blue-700"
           >
             Check Out
+            <span className="mx-1">
+          $ {isClient ? cart.length : 0}
+        </span>
           </button>
         )}
       </div>

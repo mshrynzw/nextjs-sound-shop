@@ -49,7 +49,7 @@ const Button = () => {
         onClick={handleCheckout}
       >
         Cart
-        <span className="mx-1 rounded bg-blue-500 px-2 py-1 text-white">
+        <span className="mx-1">
           $ {isClient ? cart.length : 0}
         </span>
       </button>
