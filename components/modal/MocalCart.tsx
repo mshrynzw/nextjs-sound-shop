@@ -46,7 +46,7 @@ const ModalCart = () => {
           onClick={closeModal}
           className="rounded-lg border border-white bg-white px-3 py-2 text-sm font-semibold uppercase text-black shadow-2xl transition pointer hover:bg-white/10 hover:text-white"
         >
-          Cancel
+          Back
         </button>
         {cart.length !== 0 && (
           <button
