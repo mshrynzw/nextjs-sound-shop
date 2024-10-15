@@ -1,6 +1,7 @@
 "use client"
 
-import React from "react"
+import React, {useState, useEffect} from "react"
+import Cookies from "js-cookie"
 import Image from "next/image"
 import {Item} from "@/types/item"
 import AudioStreamer from "@/components/audio/AudioStreamer"
@@ -14,10 +15,44 @@ interface ItemsProps {
 
 const Items: React.FC<ItemsProps> = ({items}) => {
   const {keyword, selectTags} = useSearch()
+  const [cart, setCart] = useState<Item[]>(() => {
+    const savedCart = Cookies.get("cart")
+    return savedCart ? JSON.parse(savedCart) : []
+  })
+  const [isClient, setIsClient] = useState(false)
+
+  useEffect(() => {
+    setIsClient(true)
+    const savedCart = Cookies.get("cart")
+    if (savedCart) {
+      setCart(JSON.parse(savedCart))
+    }
+  }, [])
+
   const filteredItems = items.filter(item =>
     item.title.toLowerCase().includes(keyword.toLowerCase()) &&
     (selectTags.length === 0 || selectTags.every(tag => item.tags?.some(itemTag => itemTag.id === tag.id)))
   )
+
+  const isItemInCart = (item: Item) => {
+    return cart.some(cartItem => cartItem.id === item.id)
+  }
+
+  const handleAddClick = (item: Item) => {
+    const updatedCart = [...cart.filter((i: Item) => i.id !== item.id), item]
+    setCart(updatedCart)
+    Cookies.set("cart", JSON.stringify(updatedCart), {expires: 7})
+  }
+
+  const handleRemoveClick = (item: Item) => {
+    const updatedCart = cart.filter((i: Item) => i.id !== item.id)
+    setCart(updatedCart)
+    if (updatedCart.length > 0) {
+      Cookies.set("cart", JSON.stringify(updatedCart), {expires: 7})
+    } else {
+      Cookies.remove("cart")
+    }
+  }
 
   return (
     <AudioProvider>
@@ -48,8 +83,30 @@ const Items: React.FC<ItemsProps> = ({items}) => {
               <AudioStreamer id={item.id.toString()}/>
 
               <div className="font-bold text-white flex flex-wrap justify-center gap-2">
-                <button className="animate-bounce bg-blue-500 hover:bg-blue-700 py-2 px-4 rounded shadow-2xl">Add
-                  $ {item.price.toString()}</button>
+                {isClient ? (
+                  isItemInCart(item) ? (
+                    <button
+                      className="animate-bounce bg-red-500 hover:bg-red-700 py-2 px-4 rounded shadow-2xl"
+                      onClick={() => handleRemoveClick(item)}
+                    >
+                      Remove $ {item.price.toString()}
+                    </button>
+                  ) : (
+                    <button
+                      className="animate-bounce bg-blue-500 hover:bg-blue-700 py-2 px-4 rounded shadow-2xl"
+                      onClick={() => handleAddClick(item)}
+                    >
+                      Add $ {item.price.toString()}
+                    </button>
+                  )
+                ) : (
+                  <button
+                    className="animate-bounce bg-blue-500 hover:bg-blue-700 py-2 px-4 rounded shadow-2xl"
+                    onClick={() => handleAddClick(item)}
+                  >
+                    Add $ {item.price.toString()}
+                  </button>
+                )}
                 {item.tags?.map((tag: Tag, i: number) => (
                   tag.alias ? (
                     <div key={i} className="rounded-lg px-4 py-2 bg-black bg-opacity-50">
