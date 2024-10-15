@@ -19,12 +19,12 @@ const Search = () => {
 
       <Tags/>
 
-      <div className="max-w-[40ch] sm:max-w-[32ch] py-2">
+      <div className="py-2 max-w-[40ch] sm:max-w-[32ch]">
         <input
           type="text"
           id="keyword"
           name="keyword"
-          className="w-full px-2 rounded text-black"
+          className="w-full rounded px-2 text-black"
           placeholder="Keyword..."
           onChange={handleChange}/>
       </div>

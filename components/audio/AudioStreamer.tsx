@@ -40,7 +40,7 @@ const AudioStreamer: React.FC<AudioStreamerProps> = ({id}) => {
   }
 
   return (
-    <div className="text-white text-8xl">
+    <div className="text-8xl text-white">
       <audio ref={audioRef} src={`/api/audio/${id}`}/>
       <button onClick={togglePlay} className="audio-play-icon">
         {playingId === id

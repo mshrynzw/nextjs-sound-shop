@@ -59,24 +59,24 @@ const Items: React.FC<ItemsProps> = ({items}) => {
               />
             </div>
             <div className="absolute inset-0 flex flex-col items-center justify-between p-4">
-              <div className="text-white text-2xl font-bold px-4 py-2 w-full text-center">
+              <div className="w-full px-4 py-2 text-center text-2xl font-bold text-white">
                 {item.title}
               </div>
 
               <AudioStreamer id={item.id.toString()}/>
 
-              <div className="font-bold text-white flex flex-wrap justify-center gap-2">
+              <div className="flex flex-wrap justify-center gap-2 font-bold text-white">
                 {isClient && (
                   isItemInCart(item) ? (
                     <button
-                      className="animate-bounce bg-red-500 hover:bg-red-700 py-2 px-4 rounded shadow-2xl"
+                      className="animate-bounce rounded bg-red-500 px-4 py-2 shadow-2xl hover:bg-red-700"
                       onClick={() => handleRemoveClick(item)}
                     >
                       Remove $ {item.price.toString()}
                     </button>
                   ) : (
                     <button
-                      className="animate-bounce bg-blue-500 hover:bg-blue-700 py-2 px-4 rounded shadow-2xl"
+                      className="animate-bounce rounded bg-blue-500 px-4 py-2 shadow-2xl hover:bg-blue-700"
                       onClick={() => handleAddClick(item)}
                     >
                       Add $ {item.price.toString()}
@@ -85,11 +85,11 @@ const Items: React.FC<ItemsProps> = ({items}) => {
                 )}
                 {item.tags?.map((tag: Tag) => (
                   tag.alias ? (
-                    <div key={tag.id} className="rounded-lg px-4 py-2 bg-black bg-opacity-50">
+                    <div key={tag.id} className="rounded-lg bg-black bg-opacity-50 px-4 py-2">
                       {tag.alias}
                     </div>
                   ) : (
-                    <div key={tag.id} className="rounded-lg px-4 py-2 bg-black bg-opacity-50">
+                    <div key={tag.id} className="rounded-lg bg-black bg-opacity-50 px-4 py-2">
                       {tag.name}
                     </div>
                   )

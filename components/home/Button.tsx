@@ -16,11 +16,11 @@ const Button = () => {
 
   const handleLogin = () => {
     openModal({
-      title: "ログイン / サインアップ",
+      title: "Login / Sign up",
       content: (
         <div>
           {/* ログインフォームの内容 */}
-          <div>ログインフォームがここに表示されます</div>
+          <div className="text-white">ログインフォームがここに表示されます</div>
         </div>
       )
     })
@@ -52,17 +52,17 @@ const Button = () => {
         )}
       </button>
       <button
-        className="z-10 mt-6 rounded-lg uppercase border border-white bg-white px-3 py-2 text-sm font-semibold text-black transition pointer hover:bg-white/10 hover:text-white md:mt-4"
+        className="z-10 mt-6 rounded-lg border border-white bg-white px-3 py-2 text-sm font-semibold uppercase text-black transition pointer hover:bg-white/10 hover:text-white md:mt-4"
         onClick={handleCheckout}
       >
         Checkout
-        <span className="text-white bg-blue-500 px-2 py-1 rounded mx-1">
+        <span className="mx-1 rounded bg-blue-500 px-2 py-1 text-white">
           $ {isClient ? cart.length : 0}
         </span>
       </button>
 
       <button
-        className="z-10 mt-6 rounded-lg uppercase border border-white bg-white px-3 py-2 text-sm font-semibold text-black transition pointer hover:bg-white/10 hover:text-white md:mt-4"
+        className="z-10 mt-6 rounded-lg border border-white bg-white px-3 py-2 text-sm font-semibold uppercase text-black transition pointer hover:bg-white/10 hover:text-white md:mt-4"
       >
         Donate
       </button>
