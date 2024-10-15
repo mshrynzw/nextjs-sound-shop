@@ -1,7 +1,6 @@
 "use client"
 
 import React, {useState, useEffect} from "react"
-import Cookies from "js-cookie"
 import Image from "next/image"
 import {Item} from "@/types/item"
 import AudioStreamer from "@/components/audio/AudioStreamer"
