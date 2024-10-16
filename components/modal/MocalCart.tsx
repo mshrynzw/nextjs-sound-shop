@@ -4,10 +4,15 @@ import React, {useEffect, useState} from "react"
 import {useCart} from "@/context/CartContext"
 import {useModal} from "@/context/ModalContext"
 import {Item} from "@/types/item"
+import {signIn, useSession} from "next-auth/react"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {faGoogle} from "@fortawesome/free-brands-svg-icons"
 
 const ModalCart = () => {
   const {cart, removeFromCart, clearCart} = useCart()
   const {closeModal} = useModal()
+
+  const {data: session} = useSession()
 
   const [isClient, setIsClient] = useState(false)
 
@@ -48,14 +53,24 @@ const ModalCart = () => {
         >
           Back
         </button>
-        {cart.length !== 0 && (
+        {session ? (
+          cart.length !== 0 && (
+            <button
+              className="rounded-lg bg-blue-500 px-3 py-2 text-sm font-semibold uppercase text-white shadow-2xl transition pointer hover:bg-blue-700"
+            >
+              Check Out
+              <span className="mx-1">$ {isClient ? cart.length : 0}</span>
+            </button>
+          )
+        ) : (
           <button
             className="rounded-lg bg-blue-500 px-3 py-2 text-sm font-semibold uppercase text-white shadow-2xl transition pointer hover:bg-blue-700"
+            onClick={() => signIn("google")}
           >
-            Check Out
-            <span className="mx-1">
-          $ {isClient ? cart.length : 0}
-        </span>
+            <div className="flex items-center justify-between space-x-2">
+              <div>Login</div>
+              <div><FontAwesomeIcon icon={faGoogle}/></div>
+            </div>
           </button>
         )}
       </div>
