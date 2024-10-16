@@ -1,12 +1,15 @@
 "use client"
 
 import React, {useEffect, useState} from "react"
+import {loadStripe} from "@stripe/stripe-js"
 import {useCart} from "@/context/CartContext"
 import {useModal} from "@/context/ModalContext"
 import {Item} from "@/types/item"
 import {signIn, useSession} from "next-auth/react"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faGoogle} from "@fortawesome/free-brands-svg-icons"
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
 
 const ModalCart = () => {
   const {cart, removeFromCart, clearCart} = useCart()
@@ -23,6 +26,27 @@ const ModalCart = () => {
   const handleRemoveClick = (item: Item) => {
     removeFromCart(item)
     if (cart.length === 0) clearCart()
+  }
+
+  const handleCheckout = async () => {
+    try {
+      const response = await fetch("/api/cart/checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({items: cart}),
+      })
+
+      const session = await response.json()
+
+      const stripe = await stripePromise
+      await stripe?.redirectToCheckout({
+        sessionId: session.sessionId,
+      })
+    } catch (error) {
+      console.error("Error:", error)
+    }
   }
 
   return (
@@ -57,6 +81,7 @@ const ModalCart = () => {
           cart.length !== 0 && (
             <button
               className="rounded-lg bg-blue-500 px-3 py-2 text-sm font-semibold uppercase text-white shadow-2xl transition pointer hover:bg-blue-700"
+              onClick={handleCheckout}
             >
               Check Out
               <span className="mx-1">$ {isClient ? cart.length : 0}</span>
