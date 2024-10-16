@@ -2,6 +2,8 @@
 
 import React, {useState, useEffect} from "react"
 import Image from "next/image"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {faCartPlus, faTrash} from "@fortawesome/free-solid-svg-icons"
 import {Item} from "@/types/item"
 import AudioStreamer from "@/components/audio/AudioStreamer"
 import {useSearch} from "@/context/SearchContext"
@@ -72,14 +74,20 @@ const Items: React.FC<ItemsProps> = ({items}) => {
                       className="rounded bg-red-500 px-4 py-2 shadow-2xl hover:bg-red-700"
                       onClick={() => handleRemoveClick(item)}
                     >
-                      Remove $ {item.price.toString()}
+                      <div className="flex items-center justify-between space-x-2">
+                        <FontAwesomeIcon icon={faTrash}/>
+                        <div>$ {item.price.toString()}</div>
+                      </div>
                     </button>
                   ) : (
                     <button
                       className="animate-bounce rounded bg-blue-500 px-4 py-2 shadow-2xl hover:bg-blue-700"
                       onClick={() => handleAddClick(item)}
                     >
-                      Add $ {item.price.toString()}
+                      <div className="flex items-center justify-between space-x-2">
+                        <FontAwesomeIcon icon={faCartPlus}/>
+                        <div>$ {item.price.toString()}</div>
+                      </div>
                     </button>
                   )
                 )}

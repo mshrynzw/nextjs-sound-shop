@@ -8,6 +8,7 @@ import {Item} from "@/types/item"
 import {signIn, useSession} from "next-auth/react"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faGoogle} from "@fortawesome/free-brands-svg-icons"
+import {faTrash} from "@fortawesome/free-solid-svg-icons"
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
 
@@ -64,7 +65,10 @@ const ModalCart = () => {
                 className="ml-auto rounded bg-red-500 px-1 shadow-2xl hover:bg-red-700"
                 onClick={() => handleRemoveClick(item)}
               >
-                Remove $ {item.price.toString()}
+                <div className="flex items-center justify-between space-x-2">
+                  <FontAwesomeIcon icon={faTrash}/>
+                  <div>$ {item.price.toString()}</div>
+                </div>
               </button>
             </li>
           ))
