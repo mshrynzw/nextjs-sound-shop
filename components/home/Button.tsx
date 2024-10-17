@@ -6,7 +6,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faGoogle} from "@fortawesome/free-brands-svg-icons"
 import {useCart} from "@/context/CartContext"
 import {useModal} from "@/context/ModalContext"
-import ModalCart from "@/components/modal/MocalCart"
+import ModalCart from "@/components/modal/ModalCart"
 
 const Button = () => {
   const {cart} = useCart()

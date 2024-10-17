@@ -1,66 +1,66 @@
+"use client"
+
+import {useEffect} from "react"
 import {supabase} from "@/lib/supabaseClient"
-import Button from "@/components/home/Button"
-import Search from "@/components/home/Search"
-import Items from "@/components/home/Items"
-import {SearchProvider} from "@/context/SearchContext"
-import {CartProvider} from "@/context/CartContext"
-import {ModalProvider} from "@/context/ModalContext"
+import {useSearchParams} from "next/navigation"
 import Modal from "@/components/modal/Modal"
-import Footer from "@/components/home/Footer"
+import {useModal} from "@/context/ModalContext"
+import ModalOrder from "@/components/modal/ModalOrder"
+import ModalCart from "@/components/modal/ModalCart"
+import {useCart} from "@/context/CartContext"
 
-const getItems = async () => {
-  try {
-    const {data: items, error: itemsError} = await supabase
-      .from("items")
-      .select("*")
+const Home = () => {
+  const {openModal} = useModal()
+  const {clearCart} = useCart()
 
-    if (itemsError) throw itemsError
+  const searchParams = useSearchParams()
 
-    const {data: tags, error: tagsError} = await supabase
-      .from("tags")
-      .select("*")
+  useEffect(() => {
+    const order = searchParams?.get("order")
+    const sessionId = searchParams?.get("sessionId")
 
-    if (tagsError) throw tagsError
+    const handleSuccess = async () => {
+      const {error} = await supabase
+        .from("orders")
+        .update({status: "success"})
+        .eq("session_id", sessionId)
 
-    return items.map(item => ({
-      ...item,
-      tags: item.tag_ids.map((tagId: number) => tags.find(tag => tag.id === tagId)).filter(Boolean)
-    }))
-  } catch (error) {
-    console.error("Error fetching items and tags:", error)
-  }
-}
+      if (error) {
+        console.error("Error updating order status:",error)
+      } else {
+        openModal({
+          title: "Order",
+          content: <ModalOrder/>
+        })
+        clearCart()
+      }
+    }
 
-export const revalidate = 3600
+    const handleCancel = async () => {
+      const {error} = await supabase
+        .from("orders")
+        .update({status: "cancel"})
+        .eq("session_id", sessionId)
 
-const Home = async () => {
-  const items = await getItems()
+      if (error) {
+        console.error("Error updating order status:",error)
+      } else {
+        openModal({
+          title: "Cart",
+          content: <ModalCart/>
+        })
+      }
+    }
+
+    if (order === "success" && sessionId) {
+      handleSuccess()
+    } else if (order === "cancel" && sessionId) {
+      handleCancel()
+    }
+  }, [])
 
   return (
-    <ModalProvider>
-      <SearchProvider>
-        <CartProvider>
-          <main className="mx-auto p-4 max-w-[1960px]">
-            <Modal/>
-            <div className="columns-1 gap-4 sm:columns-2 xl:columns-3 2xl:columns-4">
-              <div
-                className="after:pointer-events-none after:absolute relative after:inset-0 mb-4 flex flex-col items-center gap-4 overflow-hidden rounded-lg after:rounded-lg bg-white/10 px-6 py-8 text-center text-white after:content h-[629px] shadow-highlight after:shadow-highlight lg:py-0">
-                <div className="flex h-full w-full flex-col items-center justify-between">
-                  <div className="flex w-full flex-col items-center gap-4 divide-y space-y-4">
-                    <Button/>
-                    <Search/>
-                  </div>
-                  <div className="my-8">
-                    <Footer/>
-                  </div>
-                </div>
-              </div>
-              <Items items={items || []}/>
-            </div>
-          </main>
-        </CartProvider>
-      </SearchProvider>
-    </ModalProvider>
+    <Modal/>
   )
 }
 

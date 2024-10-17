@@ -1,14 +1,14 @@
 "use client"
 
 import React, {useEffect, useState} from "react"
-import {loadStripe} from "@stripe/stripe-js"
-import {useCart} from "@/context/CartContext"
-import {useModal} from "@/context/ModalContext"
-import {Item} from "@/types/item"
 import {signIn, useSession} from "next-auth/react"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faGoogle} from "@fortawesome/free-brands-svg-icons"
 import {faTrash} from "@fortawesome/free-solid-svg-icons"
+import {loadStripe} from "@stripe/stripe-js"
+import {useCart} from "@/context/CartContext"
+import {useModal} from "@/context/ModalContext"
+import {Item} from "@/types/item"
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
 
@@ -36,14 +36,14 @@ const ModalCart = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({items: cart}),
+        body: JSON.stringify({items: cart, email: session?.user?.email}),
       })
 
-      const session = await response.json()
+      const checkoutData = await response.json()
 
       const stripe = await stripePromise
       await stripe?.redirectToCheckout({
-        sessionId: session.sessionId,
+        sessionId: checkoutData.sessionId,
       })
     } catch (error) {
       console.error("Error:", error)
