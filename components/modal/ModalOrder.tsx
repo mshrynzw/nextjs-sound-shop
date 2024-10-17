@@ -4,11 +4,12 @@ import React, {useEffect, useState} from "react"
 import {supabase} from "@/lib/supabaseClient"
 import {formatLocalDate, formatLocalDateDeadline, isDeadline} from "@/lib/datetime"
 import {useModal} from "@/context/ModalContext"
+import { useSession } from "next-auth/react" 
 
 type OrderItem = {
   id: number;
   item_id: number;
-  created_at: string;
+  updated_at: string;
   items: {
     title: string;
     price: number;
@@ -17,24 +18,32 @@ type OrderItem = {
 
 const ModalOrder = () => {
   const {closeModal} = useModal()
+  const { data: session, status } = useSession()
 
   const [orders, setOrders] = useState<OrderItem[]>([])
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
+    if (status === "loading") return
+    if (status === "unauthenticated") {
+      setError("ユーザーが認証されていません。")
+      return
+    }
+
     const fetchOrders = async () => {
       const {data, error} = await supabase
         .from("orders")
         .select(`
           id,
           item_id,
-          created_at,
+          updated_at,
           items (
             title,
             price
           )
         `)
-        .order("created_at", {ascending: false})
+        .eq('email', session?.user?.email) 
+        .order("id", {ascending: false})
 
       if (error) {
         console.error("Error getting order data:", error)
@@ -93,7 +102,7 @@ const ModalOrder = () => {
                   {order.id}
                 </td>
                 <td className="p-3 text-start text-neutral-600">
-                  {formatLocalDate(order.created_at)}
+                  {formatLocalDate(order.updated_at)}
                 </td>
                 <td className="p-3 text-start text-black">
                   {order.items.title}
@@ -105,22 +114,22 @@ const ModalOrder = () => {
                   </div>
                 </td>
                 <td className="p-3 text-start text-neutral-600">
-                  {isDeadline(order.created_at) ? (
+                  {isDeadline(order.updated_at) ? (
                     <div
                       className="inline-block rounded-full bg-emerald-100 px-2 py-1 text-xs font-semibold leading-4 text-emerald-800"
                     >
-                      {formatLocalDateDeadline(order.created_at)}
+                      {formatLocalDateDeadline(order.updated_at)}
                     </div>
                   ) : (
                     <div
                       className="inline-block whitespace-nowrap rounded-full bg-orange-100 px-2 py-1 text-xs font-semibold leading-4 text-orange-800"
                     >
-                      {formatLocalDateDeadline(order.created_at)}
+                      {formatLocalDateDeadline(order.updated_at)}
                     </div>
                   )}
                 </td>
                 <td className="text-center font-medium ppy-3 ps-3">
-                  {isDeadline(order.created_at) && (
+                  {isDeadline(order.updated_at) && (
                     <button
                       className="inline-flex items-center gap-1 rounded-lg border border-slate-200 font-medium text-slate-800 group px-2.5 py-1.5 hover:border-emerald-100 hover:bg-emerald-100 hover:text-emerald-800 active:border-slate-200">
                       Download
