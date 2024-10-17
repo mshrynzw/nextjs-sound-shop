@@ -51,9 +51,7 @@ const getItems = async () => {
   }
 }
 
-export const revalidate = process.env.NEXT_PUBLIC_REVALIDATE_TIME 
-  ? parseInt(process.env.NEXT_PUBLIC_REVALIDATE_TIME) 
-  : 3600
+export const revalidate = 3600
 
 const RootLayout = async ({children}: Readonly<{ children: React.ReactNode }>) => {
   const items = await getItems()

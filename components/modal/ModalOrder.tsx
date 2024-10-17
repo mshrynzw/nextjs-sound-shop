@@ -4,16 +4,18 @@ import {useEffect, useState} from "react"
 import {supabase} from "@/lib/supabaseClient"
 import {formatLocalDate, formatLocalDateDeadline, isDeadline} from "@/lib/datetime"
 
-type Order = {
+type OrderItem = {
   id: number;
   item_id: number;
   created_at: string;
-  item_title?: string;
-  item_price?: number;
+  items: {
+    title: string;
+    price: number;
+  };
 }
 
 const ModalOrder = () => {
-  const [orders, setOrders] = useState<Order[]>([])
+  const [orders, setOrders] = useState<OrderItem[]>([])
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
@@ -35,7 +37,7 @@ const ModalOrder = () => {
         console.error("Error getting order data:", error)
         setError("Error getting order data.")
       } else {
-        setOrders(data || [])
+        setOrders(data)
       }
     }
 
