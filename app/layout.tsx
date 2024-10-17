@@ -9,10 +9,10 @@ import {NextAuthProvider} from "@/app/providers"
 import {SearchProvider} from "@/context/SearchContext"
 import {CartProvider} from "@/context/CartContext"
 import {ModalProvider} from "@/context/ModalContext"
-import Button from "@/components/home/Button"
-import Search from "@/components/home/Search"
-import Footer from "@/components/home/Footer"
-import Items from "@/components/home/Items"
+import Button from "@/components/layout/Button"
+import Search from "@/components/layout/Search"
+import Footer from "@/components/layout/Footer"
+import Items from "@/components/layout/Items"
 
 config.autoAddCss = false
 
@@ -47,10 +47,13 @@ const getItems = async () => {
     }))
   } catch (error) {
     console.error("Error fetching items and tags:", error)
+    return []
   }
 }
 
-export const revalidate = 3600
+export const revalidate = process.env.NEXT_PUBLIC_REVALIDATE_TIME 
+  ? parseInt(process.env.NEXT_PUBLIC_REVALIDATE_TIME) 
+  : 3600
 
 const RootLayout = async ({children}: Readonly<{ children: React.ReactNode }>) => {
   const items = await getItems()

@@ -2,7 +2,7 @@
 
 import React from "react"
 import {useSearch} from "@/context/SearchContext"
-import Tags from "@/components/home/Tags"
+import Tags from "@/components/layout/Tags"
 
 const Search = () => {
   const {setKeyword} = useSearch()

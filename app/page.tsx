@@ -3,11 +3,11 @@
 import {useEffect} from "react"
 import {supabase} from "@/lib/supabaseClient"
 import {useSearchParams} from "next/navigation"
+import {useCart} from "@/context/CartContext"
 import Modal from "@/components/modal/Modal"
 import {useModal} from "@/context/ModalContext"
 import ModalOrder from "@/components/modal/ModalOrder"
 import ModalCart from "@/components/modal/ModalCart"
-import {useCart} from "@/context/CartContext"
 
 const Home = () => {
   const {openModal} = useModal()
@@ -26,7 +26,7 @@ const Home = () => {
         .eq("session_id", sessionId)
 
       if (error) {
-        console.error("Error updating order status:",error)
+        console.error("Error updating order status:", error)
       } else {
         openModal({
           title: "Order",
@@ -43,7 +43,7 @@ const Home = () => {
         .eq("session_id", sessionId)
 
       if (error) {
-        console.error("Error updating order status:",error)
+        console.error("Error updating order status:", error)
       } else {
         openModal({
           title: "Cart",
@@ -60,7 +60,9 @@ const Home = () => {
   }, [])
 
   return (
-    <Modal/>
+    <>
+      <Modal/>
+    </>
   )
 }
 
