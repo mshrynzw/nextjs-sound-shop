@@ -67,41 +67,45 @@ const Items: React.FC<ItemsProps> = ({items}) => {
 
               <AudioStreamer id={item.id.toString()}/>
 
-              <div className="flex flex-wrap justify-center gap-2 font-bold text-white">
-                {isClient && (
-                  isItemInCart(item) ? (
-                    <button
-                      className="rounded bg-red-500 px-4 py-2 shadow-2xl hover:bg-red-700"
-                      onClick={() => handleRemoveClick(item)}
-                    >
-                      <div className="flex items-center justify-between space-x-2">
-                        <FontAwesomeIcon icon={faTrash}/>
-                        <div>$ {item.price.toString()}</div>
+              <div className="space-y-2 font-bold text-white">
+                <div className="flex flex-wrap justify-center">
+                  {isClient && (
+                    isItemInCart(item) ? (
+                      <button
+                        className="rounded bg-red-500 px-4 py-2 shadow-2xl hover:bg-red-700"
+                        onClick={() => handleRemoveClick(item)}
+                      >
+                        <div className="flex items-center justify-between space-x-2">
+                          <FontAwesomeIcon icon={faTrash}/>
+                          <div>$ {item.price.toString()}</div>
+                        </div>
+                      </button>
+                    ) : (
+                      <button
+                        className="animate-bounce rounded bg-blue-500 px-4 py-2 shadow-2xl hover:bg-blue-700"
+                        onClick={() => handleAddClick(item)}
+                      >
+                        <div className="flex items-center justify-between space-x-2">
+                          <FontAwesomeIcon icon={faCartPlus}/>
+                          <div>$ {item.price.toString()}</div>
+                        </div>
+                      </button>
+                    )
+                  )}
+                </div>
+                <div className="flex flex-wrap justify-center gap-2 font-bold text-white">
+                  {item.tags?.map((tag: Tag) => (
+                    tag.alias ? (
+                      <div key={tag.id} className="rounded-lg bg-black bg-opacity-50 px-4 py-2">
+                        {tag.alias}
                       </div>
-                    </button>
-                  ) : (
-                    <button
-                      className="animate-bounce rounded bg-blue-500 px-4 py-2 shadow-2xl hover:bg-blue-700"
-                      onClick={() => handleAddClick(item)}
-                    >
-                      <div className="flex items-center justify-between space-x-2">
-                        <FontAwesomeIcon icon={faCartPlus}/>
-                        <div>$ {item.price.toString()}</div>
+                    ) : (
+                      <div key={tag.id} className="rounded-lg bg-black bg-opacity-50 px-4 py-2">
+                        {tag.name}
                       </div>
-                    </button>
-                  )
-                )}
-                {item.tags?.map((tag: Tag) => (
-                  tag.alias ? (
-                    <div key={tag.id} className="rounded-lg bg-black bg-opacity-50 px-4 py-2">
-                      {tag.alias}
-                    </div>
-                  ) : (
-                    <div key={tag.id} className="rounded-lg bg-black bg-opacity-50 px-4 py-2">
-                      {tag.name}
-                    </div>
-                  )
-                ))}
+                    )
+                  ))}
+                </div>
               </div>
             </div>
           </li>

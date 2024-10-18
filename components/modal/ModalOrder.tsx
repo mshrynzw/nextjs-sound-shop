@@ -4,7 +4,8 @@ import React, {useEffect, useState} from "react"
 import {supabase} from "@/lib/supabaseClient"
 import {formatLocalDate, formatLocalDateDeadline, isDeadline} from "@/lib/datetime"
 import {useModal} from "@/context/ModalContext"
-import { useSession } from "next-auth/react" 
+import {useSession} from "next-auth/react"
+import ModalPagination from "@/components/modal/ModalPagination"
 
 type OrderItem = {
   id: number;
@@ -18,7 +19,10 @@ type OrderItem = {
 
 const ModalOrder = () => {
   const {closeModal} = useModal()
-  const { data: session, status } = useSession()
+  const {data: session, status} = useSession()
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
+  const ordersPerPage = 5
 
   const [orders, setOrders] = useState<OrderItem[]>([])
   const [error, setError] = useState<string | null>(null)
@@ -26,12 +30,12 @@ const ModalOrder = () => {
   useEffect(() => {
     if (status === "loading") return
     if (status === "unauthenticated") {
-      setError("ユーザーが認証されていません。")
+      setError("User not authenticated.")
       return
     }
 
     const fetchOrders = async () => {
-      const {data, error} = await supabase
+      const {data, error, count} = await supabase
         .from("orders")
         .select(`
           id,
@@ -41,107 +45,112 @@ const ModalOrder = () => {
             title,
             price
           )
-        `)
-        .eq('email', session?.user?.email) 
+         `, {count: "exact"})
+        .eq("email", session?.user?.email)
         .order("id", {ascending: false})
+        .range((currentPage - 1) * ordersPerPage, currentPage * ordersPerPage - 1)
 
       if (error) {
         console.error("Error getting order data:", error)
         setError("Error getting order data.")
       } else {
         setOrders(data)
+        setTotalPages(Math.ceil((count || 0) / ordersPerPage))
       }
     }
 
     fetchOrders()
-  }, [])
-
-  if (error) {
-    return <div>Error: {error}</div>
-  }
+  }, [status, session, currentPage, ordersPerPage])
 
   return (
     <div className="space-y-4">
-      <div className="rounded bg-white bg-opacity-50 p-5">
-        <div className="min-w-full overflow-x-auto">
-          <table className="min-w-full align-middle text-sm">
-            <thead>
-            <tr className="border-b-2 border-neutral-100">
-              <th
-                className="px-3 py-2 text-center text-sm font-semibold uppercase tracking-wider text-neutral-700 min-w-[140px]"
-              >
-                ID
-              </th>
-              <th
-                className="px-3 py-2 text-center text-sm font-semibold uppercase tracking-wider text-neutral-700 min-w-[140px]"
-              >
-                Date
-              </th>
-              <th
-                className="px-3 py-2 text-center text-sm font-semibold uppercase tracking-wider text-neutral-700 min-w-[140px]"
-              >
-                Item
-              </th>
-              <th
-                className="px-3 py-2 text-center text-sm font-semibold uppercase tracking-wider text-neutral-700 min-w-[140px]"
-              >
-                Price
-              </th>
-              <th
-                className="px-3 py-2 text-center text-sm font-semibold uppercase tracking-wider text-neutral-700 min-w-[140px]"
-              >
-                Deadline
-              </th>
-              <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            {orders.map(order => (
-              <tr key={order.id} className="border-b border-neutral-100 hover:bg-neutral-50">
-                <td className="p-3 text-center font-semibold text-neutral-600">
-                  {order.id}
-                </td>
-                <td className="p-3 text-start text-neutral-600">
-                  {formatLocalDate(order.updated_at)}
-                </td>
-                <td className="p-3 text-start text-black">
-                  {order.items.title}
-                </td>
-                <td className="p-3 font-medium text-neutral-600">
-                  <div
-                    className="underline decoration-neutral-200 decoration-2 underline-offset-4 hover:text-neutral-950 hover:decoration-neutral-300">
-                    $ {order.items.price}
-                  </div>
-                </td>
-                <td className="p-3 text-start text-neutral-600">
-                  {isDeadline(order.updated_at) ? (
-                    <div
-                      className="inline-block rounded-full bg-emerald-100 px-2 py-1 text-xs font-semibold leading-4 text-emerald-800"
-                    >
-                      {formatLocalDateDeadline(order.updated_at)}
-                    </div>
-                  ) : (
-                    <div
-                      className="inline-block whitespace-nowrap rounded-full bg-orange-100 px-2 py-1 text-xs font-semibold leading-4 text-orange-800"
-                    >
-                      {formatLocalDateDeadline(order.updated_at)}
-                    </div>
-                  )}
-                </td>
-                <td className="text-center font-medium ppy-3 ps-3">
-                  {isDeadline(order.updated_at) && (
-                    <button
-                      className="inline-flex items-center gap-1 rounded-lg border border-slate-200 font-medium text-slate-800 group px-2.5 py-1.5 hover:border-emerald-100 hover:bg-emerald-100 hover:text-emerald-800 active:border-slate-200">
-                      Download
-                    </button>
-                  )}
-                </td>
-              </tr>
-            ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      {error ? (
+        <div>Error: {error}</div>
+      ) : (
+        <>
+          <div className="rounded bg-white bg-opacity-50 p-5">
+            <div className="min-w-full overflow-x-auto">
+              <table className="min-w-full align-middle text-sm">
+                <thead>
+                <tr className="border-b-2 border-neutral-100">
+                  <th
+                    className="px-3 py-2 text-center text-sm font-semibold uppercase tracking-wider text-neutral-700 min-w-[140px]"
+                  >
+                    ID
+                  </th>
+                  <th
+                    className="px-3 py-2 text-center text-sm font-semibold uppercase tracking-wider text-neutral-700 min-w-[140px]"
+                  >
+                    Date
+                  </th>
+                  <th
+                    className="px-3 py-2 text-center text-sm font-semibold uppercase tracking-wider text-neutral-700 min-w-[140px]"
+                  >
+                    Item
+                  </th>
+                  <th
+                    className="px-3 py-2 text-center text-sm font-semibold uppercase tracking-wider text-neutral-700 min-w-[140px]"
+                  >
+                    Price
+                  </th>
+                  <th
+                    className="px-3 py-2 text-center text-sm font-semibold uppercase tracking-wider text-neutral-700 min-w-[140px]"
+                  >
+                    Deadline
+                  </th>
+                  <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {orders.map(order => (
+                  <tr key={order.id} className="border-b border-neutral-100 hover:bg-neutral-50">
+                    <td className="p-3 text-center font-semibold text-neutral-600">
+                      {order.id}
+                    </td>
+                    <td className="p-3 text-start text-neutral-600">
+                      {formatLocalDate(order.updated_at)}
+                    </td>
+                    <td className="p-3 text-start text-black">
+                      {order.items.title}
+                    </td>
+                    <td className="p-3 font-medium text-neutral-600">
+                      <div
+                        className="underline decoration-neutral-200 decoration-2 underline-offset-4 hover:text-neutral-950 hover:decoration-neutral-300">
+                        $ {order.items.price}
+                      </div>
+                    </td>
+                    <td className="p-3 text-start text-neutral-600">
+                      {isDeadline(order.updated_at) ? (
+                        <div
+                          className="inline-block rounded-full bg-emerald-100 px-2 py-1 text-xs font-semibold leading-4 text-emerald-800"
+                        >
+                          {formatLocalDateDeadline(order.updated_at)}
+                        </div>
+                      ) : (
+                        <div
+                          className="inline-block whitespace-nowrap rounded-full bg-orange-100 px-2 py-1 text-xs font-semibold leading-4 text-orange-800"
+                        >
+                          {formatLocalDateDeadline(order.updated_at)}
+                        </div>
+                      )}
+                    </td>
+                    <td className="text-center font-medium ppy-3 ps-3">
+                      {isDeadline(order.updated_at) && (
+                        <button
+                          className="inline-flex items-center gap-1 rounded-lg border border-slate-200 font-medium text-slate-800 group px-2.5 py-1.5 hover:border-emerald-100 hover:bg-emerald-100 hover:text-emerald-800 active:border-slate-200">
+                          Download
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <ModalPagination currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={totalPages}/>
+        </>
+      )}
       <div className="space-x-4">
         <button
           onClick={closeModal}
