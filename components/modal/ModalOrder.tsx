@@ -44,7 +44,7 @@ const ModalOrder = () => {
           id,
           item_id,
           updated_at,
-          items (
+          items!inner (
             title,
             price
           ),
@@ -58,7 +58,7 @@ const ModalOrder = () => {
         console.error("Error getting order data:", error)
         setError("Error getting order data.")
       } else {
-        setOrderItems(data)
+        setOrderItems(data as OrderItem[])
         setTotalPages(Math.ceil((count || 0) / ordersPerPage))
       }
     }

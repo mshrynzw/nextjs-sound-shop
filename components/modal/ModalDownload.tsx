@@ -12,7 +12,6 @@ type OrderItem = {
     price: number;
   };
   password: string;
-  email: string;
 }
 
 interface ModalDownloadProps {
