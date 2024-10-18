@@ -5,4 +5,5 @@ export interface Order {
   user_id: string;
   item_id: number;
   session_id: string;
+  password: string;
 }

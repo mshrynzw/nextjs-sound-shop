@@ -7,6 +7,7 @@ import {useModal} from "@/context/ModalContext"
 import {useSession} from "next-auth/react"
 import ModalDownload from "@/components/modal/ModalDownload"
 import ModalPagination from "@/components/modal/ModalPagination"
+import ModalPassword from "@/components/modal/ModalPassword"
 
 type OrderItem = {
   id: number;
@@ -16,6 +17,7 @@ type OrderItem = {
     title: string;
     price: number;
   };
+  password: string;
 }
 
 const ModalOrder = () => {
@@ -45,7 +47,8 @@ const ModalOrder = () => {
           items (
             title,
             price
-          )
+          ),
+          password
          `, {count: "exact"})
         .eq("email", session?.user?.email)
         .order("id", {ascending: false})
@@ -99,45 +102,53 @@ const ModalOrder = () => {
                   >
                     Deadline
                   </th>
+                  <th
+                    className="px-3 py-2 text-center text-sm font-semibold uppercase tracking-wider text-neutral-700 min-w-[140px]"
+                  >
+                    Password
+                  </th>
                   <th></th>
                 </tr>
                 </thead>
                 <tbody>
-                {orderItems.map(order => (
-                  <tr key={order.id} className="border-b border-neutral-100 hover:bg-neutral-50">
+                {orderItems.map(orderItem => (
+                  <tr key={orderItem.id} className="border-b border-neutral-100 hover:bg-neutral-50">
                     <td className="p-3 text-center font-semibold text-neutral-600">
-                      {order.id}
+                      {orderItem.id}
                     </td>
                     <td className="p-3 text-start text-neutral-600">
-                      {formatLocalDate(order.updated_at)}
+                      {formatLocalDate(orderItem.updated_at)}
                     </td>
                     <td className="p-3 text-start text-black">
-                      {order.items.title}
+                      {orderItem.items.title}
                     </td>
                     <td className="p-3 font-medium text-neutral-600">
                       <div
                         className="underline decoration-neutral-200 decoration-2 underline-offset-4 hover:text-neutral-950 hover:decoration-neutral-300">
-                        $ {order.items.price}
+                        $ {orderItem.items.price}
                       </div>
                     </td>
                     <td className="p-3 text-start text-neutral-600">
-                      {isDeadline(order.updated_at) ? (
+                      {isDeadline(orderItem.updated_at) ? (
                         <div
                           className="inline-block rounded-full bg-emerald-100 px-2 py-1 text-xs font-semibold leading-4 text-emerald-800"
                         >
-                          {formatLocalDateDeadline(order.updated_at)}
+                          {formatLocalDateDeadline(orderItem.updated_at)}
                         </div>
                       ) : (
                         <div
                           className="inline-block whitespace-nowrap rounded-full bg-orange-100 px-2 py-1 text-xs font-semibold leading-4 text-orange-800"
                         >
-                          {formatLocalDateDeadline(order.updated_at)}
+                          {formatLocalDateDeadline(orderItem.updated_at)}
                         </div>
                       )}
                     </td>
+                    <td className="p-3 text-start text-neutral-600">
+                      <ModalPassword password={orderItem.password}/>
+                    </td>
                     <td className="text-center font-medium ppy-3 ps-3">
-                      {isDeadline(order.updated_at) && (
-                        <ModalDownload orderItem={order}/>
+                      {isDeadline(orderItem.updated_at) && (
+                        <ModalDownload orderItem={orderItem}/>
                       )}
                     </td>
                   </tr>

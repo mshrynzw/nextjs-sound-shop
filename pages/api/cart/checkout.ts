@@ -2,6 +2,7 @@ import {NextApiRequest, NextApiResponse} from "next"
 import Stripe from "stripe"
 import {supabase} from "@/lib/supabaseClient"
 import {Item} from "@/types/item"
+import {generatePassword} from "@/lib/password"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2024-09-30.acacia",
@@ -37,6 +38,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           email: email,
           item_id: Number(item.id),
           session_id: session.id,
+          password: generatePassword(),
           status: "pending",
         })))
 
