@@ -1,6 +1,7 @@
 "use client"
 
 import React from "react"
+import {useSession} from "next-auth/react"
 
 type OrderItem = {
   id: number;
@@ -11,6 +12,7 @@ type OrderItem = {
     price: number;
   };
   password: string;
+  email: string;
 }
 
 interface ModalDownloadProps {
@@ -18,17 +20,27 @@ interface ModalDownloadProps {
 }
 
 const ModalDownload: React.FC<ModalDownloadProps> = ({orderItem}) => {
+  const {data: session} = useSession()
+
   const handleDownload = async () => {
     const inputPassword = window.prompt("Please enter a password.")
 
-    if (inputPassword !== orderItem.password) {
-      alert("Passwords do not match.")
-      return
-    }
-
     try {
-      const response = await fetch(`/api/download/${orderItem.item_id}`)
-      if (!response.ok) throw new Error("Download failed")
+      const response = await fetch(`/api/download/${orderItem.id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          password: inputPassword,
+          email: session?.user?.email,
+        }),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || "Download failed")
+      }
 
       const blob = await response.blob()
       const url = window.URL.createObjectURL(blob)
@@ -40,7 +52,8 @@ const ModalDownload: React.FC<ModalDownloadProps> = ({orderItem}) => {
       a.click()
       window.URL.revokeObjectURL(url)
     } catch (error) {
-      console.error("Download failed:", error)
+      console.error(error)
+      alert(error)
     }
   }
 
