@@ -5,6 +5,7 @@ import {supabase} from "@/lib/supabaseClient"
 import {formatLocalDate, formatLocalDateDeadline, isDeadline} from "@/lib/datetime"
 import {useModal} from "@/context/ModalContext"
 import {useSession} from "next-auth/react"
+import ModalDownload from "@/components/modal/ModalDownload"
 import ModalPagination from "@/components/modal/ModalPagination"
 
 type OrderItem = {
@@ -24,7 +25,7 @@ const ModalOrder = () => {
   const [totalPages, setTotalPages] = useState(1)
   const ordersPerPage = 5
 
-  const [orders, setOrders] = useState<OrderItem[]>([])
+  const [orderItems, setOrderItems] = useState<OrderItem[]>([])
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
@@ -54,7 +55,7 @@ const ModalOrder = () => {
         console.error("Error getting order data:", error)
         setError("Error getting order data.")
       } else {
-        setOrders(data)
+        setOrderItems(data)
         setTotalPages(Math.ceil((count || 0) / ordersPerPage))
       }
     }
@@ -102,7 +103,7 @@ const ModalOrder = () => {
                 </tr>
                 </thead>
                 <tbody>
-                {orders.map(order => (
+                {orderItems.map(order => (
                   <tr key={order.id} className="border-b border-neutral-100 hover:bg-neutral-50">
                     <td className="p-3 text-center font-semibold text-neutral-600">
                       {order.id}
@@ -136,10 +137,7 @@ const ModalOrder = () => {
                     </td>
                     <td className="text-center font-medium ppy-3 ps-3">
                       {isDeadline(order.updated_at) && (
-                        <button
-                          className="inline-flex items-center gap-1 rounded-lg border border-slate-200 font-medium text-slate-800 group px-2.5 py-1.5 hover:border-emerald-100 hover:bg-emerald-100 hover:text-emerald-800 active:border-slate-200">
-                          Download
-                        </button>
+                        <ModalDownload orderItem={order}/>
                       )}
                     </td>
                   </tr>
