@@ -1,15 +1,17 @@
 "use client"
 
 import React, {useState, useEffect} from "react"
+import dynamic from "next/dynamic"
 import {useSession, signIn, signOut} from "next-auth/react"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faGoogle} from "@fortawesome/free-brands-svg-icons"
 import {faFolderOpen} from "@fortawesome/free-regular-svg-icons"
 import {useCart} from "@/context/CartContext"
 import {useModal} from "@/context/ModalContext"
-import ModalCart from "@/components/modal/ModalCart"
-import ModalOrder from "@/components/modal/ModalOrder"
-import ModalDonate from "@/components/modal/ModalDonate"
+
+const DynamicModalCart = dynamic(() => import("@/components/modal/ModalCart"))
+const DynamicModalOrder = dynamic(() => import("@/components/modal/ModalOrder"))
+const DynamicModalDonate = dynamic(() => import("@/components/modal/ModalDonate"))
 
 const Button = () => {
   const {cart} = useCart()
@@ -26,21 +28,21 @@ const Button = () => {
   const handleCheckout = () => {
     openModal({
       title: "Cart",
-      content: <ModalCart/>
+      content: <DynamicModalCart/>
     })
   }
 
   const handleOrder = () => {
     openModal({
       title: "Order",
-      content: <ModalOrder/>
+      content: <DynamicModalOrder/>
     })
   }
 
   const handleDonate = () => {
     openModal({
       title: "Donate",
-      content: <ModalDonate/>
+      content: <DynamicModalDonate/>
     })
   }
 

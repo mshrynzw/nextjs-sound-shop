@@ -1,10 +1,12 @@
 "use client"
 
 import React, {useEffect} from "react"
+import dynamic from 'next/dynamic'
 import {useModal} from "@/context/ModalContext"
-import Modal from "@/components/modal/Modal"
-import ModalCart from "@/components/modal/ModalCart"
 import {useCart} from "@/context/CartContext"
+
+const DynamicModal = dynamic(() => import('@/components/modal/Modal'))
+const DynamicModalCart = dynamic(() => import('@/components/modal/ModalCart'))
 
 const Success = () => {
   const {openModal} = useModal()
@@ -14,12 +16,12 @@ const Success = () => {
 
     openModal({
       title: "Cart",
-      content: <ModalCart/>
+      content: <DynamicModalCart/>
     })
   }, [])
 
   return (
-    <Modal/>
+    <DynamicModal/>
   )
 }
 

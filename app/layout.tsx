@@ -23,8 +23,22 @@ const notoSansJP = Noto_Sans_JP({
 })
 
 export const metadata: Metadata = {
-  title: "Kaoru Yuki Sound",
-  description: "Sound Presets",
+  title: 'Kaoru Yuki Sound - Professional Sound Presets',
+  description: 'High-quality sound presets for music producers and audio engineers. Enhance your productions with Kaoru Yuki Sound.',
+  keywords: 'sound presets, audio production, music production, Kaoru Yuki',
+  openGraph: {
+    title: 'Kaoru Yuki Sound - Professional Sound Presets',
+    description: 'High-quality sound presets for music producers and audio engineers.',
+    images: [{ url: '/icon/icon.png' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@Oo_kaoruyuki_oO',
+    creator: '@Oo_kaoruyuki_oO',
+    title: 'Kaoru Yuki Sound - Professional Sound Presets',
+    description: 'High-quality sound presets for music producers and audio engineers.',
+    images: '/icon/icon.png',
+  },
 }
 
 const getItems = async () => {

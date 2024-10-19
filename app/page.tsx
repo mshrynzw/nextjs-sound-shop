@@ -1,14 +1,16 @@
 "use client"
 
 import {useEffect} from "react"
+import dynamic from 'next/dynamic'
 import {supabase} from "@/lib/supabaseClient"
 import {useSearchParams} from "next/navigation"
 import {useCart} from "@/context/CartContext"
-import Modal from "@/components/modal/Modal"
 import {useModal} from "@/context/ModalContext"
-import ModalOrder from "@/components/modal/ModalOrder"
-import ModalCart from "@/components/modal/ModalCart"
-import ModalDonateComplete from "@/components/modal/ModalDonateComplete"
+
+const DynamicModal = dynamic(() => import('@/components/modal/Modal'))
+const DynamicModalCart = dynamic(() => import('@/components/modal/ModalCart'))
+const DynamicModalOrder = dynamic(() => import('@/components/modal/ModalOrder'))
+const DynamicModalDonateComplete = dynamic(() => import('@/components/modal/ModalDonateComplete'))
 
 const Home = () => {
   const {openModal} = useModal()
@@ -32,7 +34,7 @@ const Home = () => {
       } else {
         openModal({
           title: "Order",
-          content: <ModalOrder/>
+          content: <DynamicModalOrder/>
         })
         clearCart()
       }
@@ -49,7 +51,7 @@ const Home = () => {
       } else {
         openModal({
           title: "Cart",
-          content: <ModalCart/>
+          content: <DynamicModalCart/>
         })
       }
     }
@@ -65,7 +67,7 @@ const Home = () => {
       } else {
         openModal({
           title: "Donate",
-          content: <ModalDonateComplete/>
+          content: <DynamicModalDonateComplete/>
         })
       }
     }
@@ -94,7 +96,7 @@ const Home = () => {
 
   return (
     <>
-      <Modal/>
+      <DynamicModal/>
     </>
   )
 }

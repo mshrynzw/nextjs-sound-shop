@@ -2,7 +2,9 @@
 
 import React from "react"
 import {useSearch} from "@/context/SearchContext"
-import Tags from "@/components/layout/Tags"
+import dynamic from 'next/dynamic'
+
+const DynamicTags = dynamic(() => import('@/components/layout/Tags'))
 
 const Search = () => {
   const {setKeyword} = useSearch()
@@ -17,7 +19,7 @@ const Search = () => {
         Search
       </h1>
 
-      <Tags/>
+      <DynamicTags/>
 
       <div className="py-2 max-w-[40ch] sm:max-w-[32ch]">
         <input
