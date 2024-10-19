@@ -67,7 +67,7 @@ const Items: React.FC<ItemsProps> = ({items}) => {
 
               <AudioStreamer id={item.id.toString()}/>
 
-              <div className="space-y-2 font-bold text-white">
+              <div className="font-bold text-white space-y-2">
                 <div className="flex flex-wrap justify-center">
                   {isClient && (
                     isItemInCart(item) ? (

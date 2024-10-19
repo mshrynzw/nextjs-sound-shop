@@ -52,11 +52,11 @@ const ModalPagination: React.FC<ModalPaginationProps> = ({currentPage, setCurren
   }
 
   return (
-    <div className="flex justify-center items-center space-x-2">
+    <div className="flex items-center justify-center space-x-2">
       <button
         onClick={() => handlePageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="px-3 py-1 rounded bg-white text-blue-500 hover:bg-blue-100 disabled:opacity-50"
+        className="rounded bg-white px-3 py-1 text-blue-500 hover:bg-blue-100 disabled:opacity-50"
       >
         <FontAwesomeIcon icon={faAnglesLeft}/>
       </button>
@@ -80,7 +80,7 @@ const ModalPagination: React.FC<ModalPaginationProps> = ({currentPage, setCurren
       <button
         onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="px-3 py-1 rounded bg-white text-blue-500 hover:bg-blue-100 disabled:opacity-50"
+        className="rounded bg-white px-3 py-1 text-blue-500 hover:bg-blue-100 disabled:opacity-50"
       >
         <FontAwesomeIcon icon={faAnglesRight}/>
       </button>

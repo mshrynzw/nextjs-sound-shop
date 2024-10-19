@@ -9,10 +9,11 @@ import {loadStripe} from "@stripe/stripe-js"
 import {useCart} from "@/context/CartContext"
 import {useModal} from "@/context/ModalContext"
 import {Item} from "@/types/item"
+import LogoStripe from "@/components/logo/LogoStripe"
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
 
-const ModalCart = () => {
+const ModalCart:React.FC = () => {
   const {cart, removeFromCart, clearCart} = useCart()
   const {closeModal} = useModal()
 
@@ -102,6 +103,7 @@ const ModalCart = () => {
             </div>
           </button>
         )}
+      <LogoStripe/>
       </div>
     </div>
   )

@@ -9,6 +9,7 @@ import {useCart} from "@/context/CartContext"
 import {useModal} from "@/context/ModalContext"
 import ModalCart from "@/components/modal/ModalCart"
 import ModalOrder from "@/components/modal/ModalOrder"
+import ModalDonate from "@/components/modal/ModalDonate"
 
 const Button = () => {
   const {cart} = useCart()
@@ -33,6 +34,13 @@ const Button = () => {
     openModal({
       title: "Order",
       content: <ModalOrder/>
+    })
+  }
+
+  const handleDonate = () => {
+    openModal({
+      title: "Donate",
+      content: <ModalDonate/>
     })
   }
 
@@ -73,6 +81,7 @@ const Button = () => {
 
         <button
           className="z-10 mt-6 rounded-lg border border-white bg-white px-3 py-2 text-sm font-semibold uppercase text-black transition pointer hover:bg-white/10 hover:text-white md:mt-4"
+          onClick={handleDonate}
         >
           Donate
         </button>
@@ -80,7 +89,7 @@ const Button = () => {
       {session && (
         <div className="space-x-4">
           <button
-            className="z-10 rounded-lg border border-white bg-white/60 px-3 py-2 text-sm font-semibold text-black transition pointer hover:bg-white/10 hover:text-white w-full"
+            className="z-10 w-full rounded-lg border border-white bg-white/60 px-3 py-2 text-sm font-semibold text-black transition pointer hover:bg-white/10 hover:text-white"
             onClick={handleOrder}
           >
             <div className="flex items-center justify-center space-x-2">

@@ -1,8 +1,6 @@
 import {NextApiRequest, NextApiResponse} from "next"
 import Stripe from "stripe"
 import {supabase} from "@/lib/supabaseClient"
-import {Item} from "@/types/item"
-import {generatePassword} from "@/lib/password"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2024-09-30.acacia",
@@ -11,44 +9,44 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
     try {
-      const {items, email} = req.body
+      const {email, price, message} = req.body
 
-      const line_items = items.map((item: Item) => ({
+      const line_items = [{
         price_data: {
           currency: "usd",
           product_data: {
-            name: item.title,
+            name: "Donate",
           },
-          unit_amount: item.price * 100,
+          unit_amount: price * 100,
         },
         quantity: 1,
-      }))
+      }]
 
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
         line_items,
         mode: "payment",
         customer_email: email,
-        success_url: `${req.headers.origin}?order=success&sessionId={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${req.headers.origin}?order=cancel&sessionId={CHECKOUT_SESSION_ID}`,
+        success_url: `${req.headers.origin}?donate=success&sessionId={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${req.headers.origin}?donate=cancel&sessionId={CHECKOUT_SESSION_ID}`,
       })
 
       await supabase
-        .from("orders")
-        .insert(items.map((item: Item) => ({
-          email: email,
-          item_id: Number(item.id),
+        .from("donates")
+        .insert({
           session_id: session.id,
-          password: generatePassword(),
           status: "pending",
-        })))
+          price: price,
+          email: email,
+          message: message,
+        })
 
       res.status(200).json({sessionId: session.id})
     } catch (err) {
       if (err instanceof Stripe.errors.StripeError) {
-        res.status(err.statusCode || 500).json({ statusCode: err.statusCode, message: err.message })
+        res.status(err.statusCode || 500).json({statusCode: err.statusCode, message: err.message})
       } else {
-        res.status(500).json({ statusCode: 500, message: "An unexpected error occurred" })
+        res.status(500).json({statusCode: 500, message: "An unexpected error occurred"})
       }
     }
   } else {

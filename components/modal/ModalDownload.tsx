@@ -60,7 +60,7 @@ const ModalDownload: React.FC<ModalDownloadProps> = ({orderItem}) => {
   return (
     <button
       onClick={handleDownload}
-      className="inline-flex items-center gap-1 rounded-lg border text-neutral-800 border-slate-200 font-medium group px-2.5 py-1.5 hover:border-emerald-100 hover:bg-emerald-100 hover:text-emerald-800 active:border-slate-200"
+      className="inline-flex items-center gap-1 rounded-lg border border-slate-200 font-medium text-neutral-800 group px-2.5 py-1.5 hover:border-emerald-100 hover:bg-emerald-100 hover:text-emerald-800 active:border-slate-200"
     >
       Download
     </button>

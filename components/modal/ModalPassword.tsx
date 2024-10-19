@@ -21,24 +21,24 @@ const ModalPassword: React.FC<ModalPasswordProps> = ({password}) => {
     <div className="flex flex-row items-center justify-between">
       <div className="mr-2">
         {visiblePassword ? (
-          <div className="flex flex-row justify-between items-center space-x-2">
-            <input type="text" value={password} className="px-2 rounded w-40" readOnly />
+          <div className="flex flex-row items-center justify-between space-x-2">
+            <input type="text" value={password} className="w-40 rounded px-2" readOnly />
             <button
               onClick={handleCopy}
-              className="inline-flex items-center gap-1 rounded-lg font-medium bg-white text-black group px-2.5 py-1.5 hover:bg-black/75 hover:text-white"
+              className="inline-flex items-center gap-1 rounded-lg bg-white font-medium text-black group px-2.5 py-1.5 hover:bg-black/75 hover:text-white"
             >
               <FontAwesomeIcon icon={faCopy}/>
             </button>
           </div>
         ) : (
           <>
-            <input type="password" value="************" className="px-2 rounded w-40" readOnly />
+            <input type="password" value="************" className="w-40 rounded px-2" readOnly />
           </>
         )}
       </div>
       <button
         onClick={handlePassword}
-        className="inline-flex items-center gap-1 rounded-lg  font-medium bg-white text-black group px-2.5 py-1.5 hover:bg-black/75 hover:text-white"
+        className="inline-flex items-center gap-1 rounded-lg bg-white font-medium text-black group px-2.5 py-1.5 hover:bg-black/75 hover:text-white"
       >
         {visiblePassword ? (
           <FontAwesomeIcon icon={faEyeSlash}/>
