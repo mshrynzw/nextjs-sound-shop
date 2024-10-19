@@ -27,9 +27,18 @@ export const metadata: Metadata = {
   description: 'High-quality sound presets for music producers and audio engineers. Enhance your productions with Kaoru Yuki Sound.',
   keywords: 'sound presets, audio production, music production, Kaoru Yuki',
   openGraph: {
+    type: 'website',
+    url: 'https://www.yourwebsite.com',
     title: 'Kaoru Yuki Sound - Professional Sound Presets',
     description: 'High-quality sound presets for music producers and audio engineers.',
-    images: [{ url: '/icon/icon.png' }],
+    images: [
+      {
+        url: '/icon/icon.png',
+        width: 1200,
+        height: 630,
+        alt: 'Kaoru Yuki Sound',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
