@@ -106,7 +106,7 @@ const Items: React.FC<ItemsProps> = ({items}) => {
                   )}
                 </div>
                 <div className="flex flex-wrap justify-center gap-2 font-bold text-white">
-                  {item.tags?.map((tag: Tag) => (
+                  {item.tags?.sort((a, b) => a.id - b.id).map((tag: Tag) => (
                     tag.alias ? (
                       <div key={tag.id} className="rounded-lg bg-black bg-opacity-50 px-4 py-2">
                         {tag.alias}
