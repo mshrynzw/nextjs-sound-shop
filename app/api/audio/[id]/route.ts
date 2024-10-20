@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
+import { Readable } from 'stream';
 
 export async function GET(
   request: NextRequest,
@@ -19,6 +20,7 @@ export async function GET(
     const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
     const chunksize = (end - start) + 1;
     const file = fs.createReadStream(audioPath, { start, end });
+    const readableStream = Readable.toWeb(file) as ReadableStream<Uint8Array>;
     const headers = {
       'Content-Range': `bytes ${start}-${end}/${fileSize}`,
       'Accept-Ranges': 'bytes',
@@ -26,18 +28,19 @@ export async function GET(
       'Content-Type': 'audio/mpeg',
     };
 
-    return new NextResponse(file as any, {
+    return new NextResponse(readableStream, {
       status: 206,
       headers: headers,
     });
   } else {
     const file = fs.createReadStream(audioPath);
+    const readableStream = Readable.toWeb(file) as ReadableStream<Uint8Array>;
     const headers = {
       'Content-Length': fileSize.toString(),
       'Content-Type': 'audio/mpeg',
     };
 
-    return new NextResponse(file as any, {
+    return new NextResponse(readableStream, {
       status: 200,
       headers: headers,
     });
