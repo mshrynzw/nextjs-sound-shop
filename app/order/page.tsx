@@ -11,13 +11,15 @@ const DynamicModalCart = dynamic(() => import('@/components/modal/ModalCart'))
 const Success = () => {
   const {openModal} = useModal()
   const {clearCart} = useCart()
-  useEffect(()=>{
-    clearCart()
-
-    openModal({
-      title: "Cart",
-      content: <DynamicModalCart/>
-    })
+  useEffect(() => {
+    const executeOnce = () => {
+      clearCart()
+      openModal({
+        title: "Cart",
+        content: <DynamicModalCart/>
+      })
+    }
+    executeOnce()
   }, [])
 
   return (
