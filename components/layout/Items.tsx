@@ -1,6 +1,6 @@
 "use client"
 
-import React, {useState, useEffect} from "react"
+import React, { useState, useEffect, useMemo } from "react"
 import Image from "next/image"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faCartPlus, faTrash} from "@fortawesome/free-solid-svg-icons"
@@ -10,6 +10,7 @@ import {useSearch} from "@/context/SearchContext"
 import {Tag} from "@/types/tag"
 import {AudioProvider} from "@/context/AudioContext"
 import {useCart} from "@/context/CartContext"
+import seedrandom from "seedrandom"
 
 interface ItemsProps {
   items: Item[];
@@ -19,16 +20,29 @@ const Items: React.FC<ItemsProps> = ({items}) => {
   const {keyword, selectTags} = useSearch()
   const {cart, addToCart, removeFromCart, clearCart, isItemInCart} = useCart()
 
-  const [isClient, setIsClient] = useState(false)
+  const [randomSeed, setRandomSeed] = useState(0)
 
   useEffect(() => {
-    setIsClient(true)
+    setRandomSeed(Math.random())
   }, [])
 
-  const filteredItems = items.filter(item =>
-    item.title.toLowerCase().includes(keyword.toLowerCase()) &&
-    (selectTags.length === 0 || selectTags.every(tag => item.tags?.some(itemTag => itemTag.id === tag.id)))
-  )
+  const shuffleArray = (array: Item[], seed: number) => {
+    const shuffled = [...array]
+    const rng = seedrandom(seed.toString())
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(rng() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+    }
+    return shuffled
+  }
+
+  const filteredItems = useMemo(() => {
+    const filtered = items.filter(item =>
+      item.title.toLowerCase().includes(keyword.toLowerCase()) &&
+      (selectTags.length === 0 || selectTags.every(tag => item.tags?.some(itemTag => itemTag.id === tag.id)))
+    )
+    return shuffleArray(filtered, randomSeed)
+  }, [items, keyword, selectTags, randomSeed])
 
   const handleAddClick = (item: Item) => {
     addToCart(item)
@@ -69,28 +83,26 @@ const Items: React.FC<ItemsProps> = ({items}) => {
 
               <div className="font-bold text-white space-y-2">
                 <div className="flex flex-wrap justify-center">
-                  {isClient && (
-                    isItemInCart(item) ? (
-                      <button
-                        className="rounded bg-red-500 px-4 py-2 shadow-2xl hover:bg-red-700"
-                        onClick={() => handleRemoveClick(item)}
-                      >
-                        <div className="flex items-center justify-between space-x-2">
-                          <FontAwesomeIcon icon={faTrash}/>
-                          <div>$ {item.price.toString()}</div>
-                        </div>
-                      </button>
-                    ) : (
-                      <button
-                        className="animate-bounce rounded bg-blue-500 px-4 py-2 shadow-2xl hover:bg-blue-700"
-                        onClick={() => handleAddClick(item)}
-                      >
-                        <div className="flex items-center justify-between space-x-2">
-                          <FontAwesomeIcon icon={faCartPlus}/>
-                          <div>$ {item.price.toString()}</div>
-                        </div>
-                      </button>
-                    )
+                  {isItemInCart(item) ? (
+                    <button
+                      className="rounded bg-red-500 px-4 py-2 shadow-2xl hover:bg-red-700"
+                      onClick={() => handleRemoveClick(item)}
+                    >
+                      <div className="flex items-center justify-between space-x-2">
+                        <FontAwesomeIcon icon={faTrash}/>
+                        <div>$ {item.price.toString()}</div>
+                      </div>
+                    </button>
+                  ) : (
+                    <button
+                      className="animate-bounce rounded bg-blue-500 px-4 py-2 shadow-2xl hover:bg-blue-700"
+                      onClick={() => handleAddClick(item)}
+                    >
+                      <div className="flex items-center justify-between space-x-2">
+                        <FontAwesomeIcon icon={faCartPlus}/>
+                        <div>$ {item.price.toString()}</div>
+                      </div>
+                    </button>
                   )}
                 </div>
                 <div className="flex flex-wrap justify-center gap-2 font-bold text-white">
