@@ -1,7 +1,7 @@
 "use client"
 
 import React, {useRef, useEffect} from "react"
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import dynamic from 'next/dynamic'
 import {faCirclePause} from "@fortawesome/free-regular-svg-icons"
 import {faCirclePlay} from "@fortawesome/free-regular-svg-icons"
 import {useAudio} from "@/context/AudioContext"
@@ -9,6 +9,10 @@ import {useAudio} from "@/context/AudioContext"
 interface AudioStreamerProps {
   id: string;
 }
+
+const FontAwesomeIcon = dynamic(() => import('@fortawesome/react-fontawesome').then(mod => mod.FontAwesomeIcon), {
+  ssr: false
+})
 
 const AudioStreamer: React.FC<AudioStreamerProps> = ({id}) => {
   const {playingId, setPlayingId} = useAudio()

@@ -1,6 +1,10 @@
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import dynamic from 'next/dynamic'
 import {faFacebook, faTwitter, faYoutube} from "@fortawesome/free-brands-svg-icons"
 import Link from "next/link"
+
+const FontAwesomeIcon = dynamic(() => import('@fortawesome/react-fontawesome').then(mod => mod.FontAwesomeIcon), {
+  ssr: false
+})
 
 const Footer = () => {
   return (

@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react"
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import dynamic from 'next/dynamic'
 import {faAnglesLeft, faAnglesRight} from "@fortawesome/free-solid-svg-icons"
 
 interface ModalPaginationProps {
@@ -9,6 +9,10 @@ interface ModalPaginationProps {
   setCurrentPage: (currentPage: number) => void;
   totalPages: number;
 }
+
+const FontAwesomeIcon = dynamic(() => import('@fortawesome/react-fontawesome').then(mod => mod.FontAwesomeIcon), {
+  ssr: false
+})
 
 const ModalPagination: React.FC<ModalPaginationProps> = ({currentPage, setCurrentPage, totalPages}) => {
 

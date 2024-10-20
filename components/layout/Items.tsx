@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from "react"
 import Image from "next/image"
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import dynamic from 'next/dynamic'
 import {faCartPlus, faTrash} from "@fortawesome/free-solid-svg-icons"
 import {Item} from "@/types/item"
 import AudioStreamer from "@/components/audio/AudioStreamer"
@@ -15,6 +15,10 @@ import seedrandom from "seedrandom"
 interface ItemsProps {
   items: Item[];
 }
+
+const FontAwesomeIcon = dynamic(() => import('@fortawesome/react-fontawesome').then(mod => mod.FontAwesomeIcon), {
+  ssr: false
+})
 
 const Items: React.FC<ItemsProps> = ({items}) => {
   const {keyword, selectTags} = useSearch()

@@ -1,10 +1,14 @@
 import React, {useState} from "react"
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import dynamic from 'next/dynamic'
 import {faCopy, faEye, faEyeSlash} from "@fortawesome/free-solid-svg-icons"
 
 interface ModalPasswordProps {
   password: string;
 }
+
+const FontAwesomeIcon = dynamic(() => import('@fortawesome/react-fontawesome').then(mod => mod.FontAwesomeIcon), {
+  ssr: false
+})
 
 const ModalPassword: React.FC<ModalPasswordProps> = ({password}) => {
   const [visiblePassword, setVisiblePassword] = useState<boolean>(false)

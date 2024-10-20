@@ -2,7 +2,7 @@
 
 import React, {useEffect, useState} from "react"
 import {signIn, useSession} from "next-auth/react"
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import dynamic from 'next/dynamic'
 import {faGoogle} from "@fortawesome/free-brands-svg-icons"
 import {faTrash} from "@fortawesome/free-solid-svg-icons"
 import {loadStripe} from "@stripe/stripe-js"
@@ -12,6 +12,10 @@ import {Item} from "@/types/item"
 import LogoStripe from "@/components/logo/LogoStripe"
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
+
+const FontAwesomeIcon = dynamic(() => import('@fortawesome/react-fontawesome').then(mod => mod.FontAwesomeIcon), {
+  ssr: false
+})
 
 const ModalCart:React.FC = () => {
   const {cart, removeFromCart, clearCart} = useCart()
