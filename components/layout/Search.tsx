@@ -26,7 +26,7 @@ const Search = () => {
           type="text"
           id="keyword"
           name="keyword"
-          className="w-full rounded px-2 text-black border-b-2 border-transparent focus:outline-none focus:border-blue-500 transition-colors duration-300"
+          className="w-full rounded border-b-2 border-transparent px-2 text-black transition-colors duration-300 focus:border-blue-500 focus:outline-none"
           placeholder="Keyword..."
           onChange={handleChange}/>
       </div>

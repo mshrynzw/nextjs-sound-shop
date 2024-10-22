@@ -80,7 +80,7 @@ const ModalDonateCheckout: React.FC<ModalDonateCheckoutProps> = ({setShow}) => {
               <label className="text-left font-bold text-white/75" htmlFor="email">E-mail</label>
               <input
                 type="email" id="email" name="email"
-                className="rounded px-2 text-black border-b-2 border-transparent focus:outline-none focus:border-blue-500 transition-colors duration-300" 
+                className="rounded border-b-2 border-transparent px-2 text-black transition-colors duration-300 focus:border-blue-500 focus:outline-none" 
                 value={email} onChange={(e) => setEmail(e.target.value)}
                 disabled={!!session?.user?.email}
               />
@@ -91,7 +91,7 @@ const ModalDonateCheckout: React.FC<ModalDonateCheckoutProps> = ({setShow}) => {
               <span className="font-bold text-white">$</span>
               <input
                 type="number" id="price" name="price"
-                className="w-32 rounded px-2 text-right text-black border-b-2 border-transparent focus:outline-none focus:border-blue-500 transition-colors duration-300"
+                className="w-32 rounded border-b-2 border-transparent px-2 text-right text-black transition-colors duration-300 focus:border-blue-500 focus:outline-none"
                 value={price}
                 onChange={(e) => {
                   const value = Math.floor(Number(e.target.value))
@@ -105,7 +105,7 @@ const ModalDonateCheckout: React.FC<ModalDonateCheckoutProps> = ({setShow}) => {
           <div className="mx-auto max-w-md space-y-2">
             <label className="text-left font-bold text-white/75" htmlFor="message">Message</label>
             <textarea
-              id="message" name="message" rows={4} className="w-full rounded px-2 text-black border-b-2 border-transparent focus:outline-none focus:border-blue-500 transition-colors duration-300"
+              id="message" name="message" rows={4} className="w-full rounded border-b-2 border-transparent px-2 text-black transition-colors duration-300 focus:border-blue-500 focus:outline-none"
               placeholder="Your message to the creator (optional)"
               value={message} onChange={(e) => setMessage(e.target.value)}
             />

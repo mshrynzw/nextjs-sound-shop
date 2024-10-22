@@ -72,7 +72,7 @@ const Tags = () => {
       </div>
 
       <div className="text-left font-bold">Synth</div>
-      <div className="mb-4 flex flex-wrap gap-x-4 text-white/75">
+      <div className="mb-4 flex flex-col flex-wrap items-start gap-x-4 text-white/75">
         {tags.map(tag => (
           tag.type === "synth" && (
             <div key={tag.id} className="space-x-2">

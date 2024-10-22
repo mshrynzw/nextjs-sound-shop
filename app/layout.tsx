@@ -90,11 +90,20 @@ const RootLayout = async ({children}: Readonly<{ children: React.ReactNode }>) =
               {children}
               <div className="columns-1 gap-4 sm:columns-2 xl:columns-3 2xl:columns-4">
                 <div
-                  className="after:pointer-events-none after:absolute relative after:inset-0 mb-4 flex flex-col items-center gap-4 overflow-hidden rounded-lg after:rounded-lg bg-white/10 px-6 py-8 text-center text-white after:content h-[629px] shadow-highlight after:shadow-highlight lg:py-0">
+                  className="after:pointer-events-none after:absolute relative after:inset-0 mb-4 flex flex-col items-center gap-4 overflow-hidden rounded-lg after:rounded-lg bg-white/10 px-6 py-8 text-center text-white after:content h-[935px] shadow-highlight after:shadow-highlight lg:py-0">
                   <div className="flex h-full w-full flex-col items-center justify-between">
                     <div className="flex w-full flex-col items-center gap-4 divide-y space-y-4">
                       <Button/>
                       <Search/>
+                      <div className="mx-12 py-4 text-white/75">
+                        Each item in this collection includes
+                        <br/>
+                        <span className="font-bold text-white">10 preset</span> configurations.
+                        <br/>
+                        In these presets, <span className="font-bold text-white">the delay and reverb effects are initially set to OFF</span>,
+                        <br/>
+                        allowing you to start with a clean sound and customize the effects to your preference.
+                      </div>
                     </div>
                     <div className="my-8">
                       <Footer/>
