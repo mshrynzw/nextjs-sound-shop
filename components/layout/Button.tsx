@@ -83,12 +83,12 @@ const Button = () => {
           </div>
         </button>
 
-        <button
-          className="z-10 mt-6 rounded-lg border border-white bg-white px-3 py-2 text-sm font-semibold uppercase text-black transition pointer hover:bg-white/10 hover:text-white md:mt-4"
-          onClick={handleDonate}
-        >
-          Donate
-        </button>
+        {/*<button*/}
+        {/*  className="z-10 mt-6 rounded-lg border border-white bg-white px-3 py-2 text-sm font-semibold uppercase text-black transition pointer hover:bg-white/10 hover:text-white md:mt-4"*/}
+        {/*  onClick={handleDonate}*/}
+        {/*>*/}
+        {/*  Donate*/}
+        {/*</button>*/}
       </div>
       {session && (
         <div className="space-x-4">
