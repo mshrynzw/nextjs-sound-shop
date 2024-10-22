@@ -41,12 +41,12 @@ const Button = () => {
     })
   }
 
-  const handleDonate = () => {
-    openModal({
-      title: "Donate",
-      content: <DynamicModalDonate/>
-    })
-  }
+  // const handleDonate = () => {
+  //   openModal({
+  //     title: "Donate",
+  //     content: <DynamicModalDonate/>
+  //   })
+  // }
 
   return (
     <div className="mt-4 space-y-4">
