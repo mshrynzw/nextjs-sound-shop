@@ -10,7 +10,7 @@ import {useModal} from "@/context/ModalContext"
 
 const DynamicModalCart = dynamic(() => import("@/components/modal/ModalCart"))
 const DynamicModalOrder = dynamic(() => import("@/components/modal/ModalOrder"))
-const DynamicModalDonate = dynamic(() => import("@/components/modal/ModalDonate"))
+// const DynamicModalDonate = dynamic(() => import("@/components/modal/ModalDonate"))
 const FontAwesomeIcon = dynamic(() => import('@fortawesome/react-fontawesome').then(mod => mod.FontAwesomeIcon), {
   ssr: false
 })
