@@ -2,7 +2,7 @@
 
 import React, {useEffect, useState} from "react"
 import {signIn, useSession} from "next-auth/react"
-import dynamic from 'next/dynamic'
+import dynamic from "next/dynamic"
 import {faGoogle} from "@fortawesome/free-brands-svg-icons"
 import {faTrash} from "@fortawesome/free-solid-svg-icons"
 import {loadStripe} from "@stripe/stripe-js"
@@ -13,13 +13,15 @@ import LogoStripe from "@/components/logo/LogoStripe"
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
 
-const FontAwesomeIcon = dynamic(() => import('@fortawesome/react-fontawesome').then(mod => mod.FontAwesomeIcon), {
+const FontAwesomeIcon = dynamic(() => import("@fortawesome/react-fontawesome").then(mod => mod.FontAwesomeIcon), {
   ssr: false
 })
 
-const ModalCart:React.FC = () => {
+const DynamicModalCartLegal = dynamic(() => import("@/components/modal/ModalCartLegal"))
+
+const ModalCart: React.FC = () => {
   const {cart, removeFromCart, clearCart} = useCart()
-  const {closeModal} = useModal()
+  const {closeModal, openModal} = useModal()
 
   const {data: session} = useSession()
 
@@ -33,7 +35,6 @@ const ModalCart:React.FC = () => {
     removeFromCart(item)
     if (cart.length === 0) clearCart()
   }
-
   const handleCheckout = async () => {
     try {
       const response = await fetch("/api/cart/checkout", {
@@ -53,6 +54,13 @@ const ModalCart:React.FC = () => {
     } catch (error) {
       console.error("Error:", error)
     }
+  }
+
+  const handleClick = () => {
+    openModal({
+      title: "Legal Notice",
+      content: <DynamicModalCartLegal/>
+    })
   }
 
   return (
@@ -79,35 +87,38 @@ const ModalCart:React.FC = () => {
           ))
         )}
       </ul>
-      <div className="space-x-4">
-        <button
-          onClick={closeModal}
-          className="rounded-lg border border-white bg-white px-3 py-2 text-sm font-semibold uppercase text-black shadow-2xl transition pointer hover:bg-white/10 hover:text-white"
-        >
-          Back
-        </button>
-        {session ? (
-          cart.length !== 0 && (
+      <div className="space-y-2">
+        <div className="space-x-4">
+          <button
+            onClick={closeModal}
+            className="rounded-lg border border-white bg-white px-3 py-2 text-sm font-semibold uppercase text-black shadow-2xl transition pointer hover:bg-white/10 hover:text-white"
+          >
+            Back
+          </button>
+          {session ? (
+            cart.length !== 0 && (
+              <button
+                className="rounded-lg bg-blue-500 px-3 py-2 text-sm font-semibold uppercase text-white shadow-2xl transition pointer hover:bg-blue-700"
+                onClick={handleCheckout}
+              >
+                Check Out
+                <span className="mx-1">$ {isClient ? cart.length : 0}</span>
+              </button>
+            )
+          ) : (
             <button
               className="rounded-lg bg-blue-500 px-3 py-2 text-sm font-semibold uppercase text-white shadow-2xl transition pointer hover:bg-blue-700"
-              onClick={handleCheckout}
+              onClick={() => signIn("google")}
             >
-              Check Out
-              <span className="mx-1">$ {isClient ? cart.length : 0}</span>
+              <div className="flex items-center justify-between space-x-2">
+                <div>Login</div>
+                <div><FontAwesomeIcon icon={faGoogle}/></div>
+              </div>
             </button>
-          )
-        ) : (
-          <button
-            className="rounded-lg bg-blue-500 px-3 py-2 text-sm font-semibold uppercase text-white shadow-2xl transition pointer hover:bg-blue-700"
-            onClick={() => signIn("google")}
-          >
-            <div className="flex items-center justify-between space-x-2">
-              <div>Login</div>
-              <div><FontAwesomeIcon icon={faGoogle}/></div>
-            </div>
-          </button>
-        )}
-      <LogoStripe/>
+          )}
+        </div>
+        <LogoStripe/>
+        <a onClick={handleClick} className="underline text-xs text-white/75 hover:cursor-pointer hover:text-white">Legal Notice</a>
       </div>
     </div>
   )
