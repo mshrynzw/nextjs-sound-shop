@@ -35,11 +35,13 @@ const AnimatedItem: React.FC<AnimatedItemProps> = ({ item, handleAddClick, handl
     threshold: 0.1,
   })
 
-  const [isInCart, setIsInCart] = useState(isItemInCart(item))
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    setIsInCart(isItemInCart(item))
-  }, [isItemInCart, item])
+    setMounted(true)
+  }, [])
+
+  const isInCart = mounted ? isItemInCart(item) : false
 
   return (
     <motion.li
@@ -87,7 +89,7 @@ const AnimatedItem: React.FC<AnimatedItemProps> = ({ item, handleAddClick, handl
               </button>
             ) : (
               <button
-                className="animate-bounce rounded bg-blue-500 px-4 py-2 shadow-2xl hover:bg-blue-700"
+                className={`rounded bg-blue-500 px-4 py-2 shadow-2xl hover:bg-blue-700 ${mounted ? 'animate-bounce' : ''}`}
                 onClick={() => handleAddClick(item)}
               >
                 <div className="flex items-center justify-between space-x-2">
