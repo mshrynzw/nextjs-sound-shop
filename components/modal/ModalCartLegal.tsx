@@ -2,10 +2,10 @@
 
 import React from "react"
 import Image from "next/image"
+import dynamic from "next/dynamic"
 import LogoStripe from "@/components/logo/LogoStripe"
 import {useModal} from "@/context/ModalContext"
-import styles from "@/components/modal/ModalCartLegal.module.css"
-import dynamic from "next/dynamic"
+import styles from "@/components/modal/Modal.module.css"
 
 const DynamicModalCart = dynamic(() => import("@/components/modal/ModalCart"))
 
@@ -20,8 +20,8 @@ const ModalCartLegal = () => {
   }
 
   return (
-    <div className="space-y-4">
-      <div className={`space-y-4 h-[400px] overflow-y-auto ${styles.scrollContainer}`}>
+    <>
+      <div className="space-y-4">
         <Image
           src="/image/legal_notice.webp"
           alt="Legal notice"
@@ -41,7 +41,7 @@ const ModalCartLegal = () => {
         </button>
         <LogoStripe/>
       </div>
-    </div>
+    </>
   )
 }
 

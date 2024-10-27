@@ -3,6 +3,7 @@
 import React from "react"
 import {motion, AnimatePresence} from "framer-motion"
 import {useModal} from "@/context/ModalContext"
+import styles from "@/components/modal/Modal.module.css"
 
 const Modal: React.FC = () => {
   const {isOpen, modalContent, closeModal} = useModal()
@@ -52,7 +53,7 @@ const Modal: React.FC = () => {
                 <div className="h-full w-full">
                   <div className="flex w-full flex-col items-center gap-4 divide-y">
                     <div className="text-base font-bold uppercase tracking-widest">{modalContent?.title}</div>
-                    <div className="pt-2">{modalContent?.content}</div>
+                    <div className={`pt-2 space-y-4 h-[400px] overflow-y-auto ${styles.scrollContainer}`}>{modalContent?.content}</div>
                   </div>
                 </div>
               </div>

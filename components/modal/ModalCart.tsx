@@ -125,4 +125,3 @@ const ModalCart: React.FC = () => {
 }
 
 export default ModalCart
-
