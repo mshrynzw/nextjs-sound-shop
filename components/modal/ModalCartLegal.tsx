@@ -5,7 +5,6 @@ import Image from "next/image"
 import dynamic from "next/dynamic"
 import LogoStripe from "@/components/logo/LogoStripe"
 import {useModal} from "@/context/ModalContext"
-import styles from "@/components/modal/Modal.module.css"
 
 const DynamicModalCart = dynamic(() => import("@/components/modal/ModalCart"))
 
