@@ -144,7 +144,9 @@ const ModalOrder = () => {
                       )}
                     </td>
                     <td className="p-3 text-start text-neutral-600">
-                      <ModalPassword password={orderItem.password}/>
+                      {isDeadline(orderItem.updated_at) && (
+                        <ModalPassword password={orderItem.password}/>
+                      )}
                     </td>
                     <td className="text-center font-medium ppy-3 ps-3">
                       {isDeadline(orderItem.updated_at) && (
