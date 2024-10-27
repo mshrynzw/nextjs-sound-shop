@@ -35,6 +35,12 @@ const AnimatedItem: React.FC<AnimatedItemProps> = ({ item, handleAddClick, handl
     threshold: 0.1,
   })
 
+  const [isInCart, setIsInCart] = useState(isItemInCart(item))
+
+  useEffect(() => {
+    setIsInCart(isItemInCart(item))
+  }, [isItemInCart, item])
+
   return (
     <motion.li
       ref={ref}
@@ -69,7 +75,7 @@ const AnimatedItem: React.FC<AnimatedItemProps> = ({ item, handleAddClick, handl
 
         <div className="font-bold text-white space-y-2">
           <div className="flex flex-wrap justify-center">
-            {isItemInCart(item) ? (
+            {isInCart ? (
               <button
                 className="rounded bg-red-500 px-4 py-2 shadow-2xl hover:bg-red-700"
                 onClick={() => handleRemoveClick(item)}
