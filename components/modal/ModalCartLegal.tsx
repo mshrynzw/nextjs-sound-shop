@@ -26,7 +26,11 @@ const ModalCartLegal = () => {
           src="/image/legal_notice.webp"
           alt="Legal notice"
           className="transform brightness-90 transition will-change-auto group-hover:brightness-110"
-          style={{transform: "translate3d(0, 0, 0)"}}
+          style={{
+            transform: "translate3d(0, 0, 0)",
+            width: "100%",
+            height: "auto"
+          }}
           width={720}
           height={480}
           priority
