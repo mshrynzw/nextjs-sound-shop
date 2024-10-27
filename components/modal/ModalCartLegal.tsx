@@ -34,6 +34,7 @@ const ModalCartLegal = () => {
           width={720}
           height={480}
           priority
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
       </div>
       <div className="space-y-2">
